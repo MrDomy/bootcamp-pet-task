@@ -26,6 +26,11 @@ export function createPetHandler(req: Request, res: Response) {
 		return
 	}
 
+	if (typeof name !== 'string' || !name.trim()) {
+		res.status(400).json({ message: 'Valid name is required' })
+		return
+	}
+
 	const pet = createPet(name)
 	res.status(201).json(pet)
 }
