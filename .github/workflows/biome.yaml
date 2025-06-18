@@ -1,0 +1,33 @@
+name: Biome Linting and Formatting
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  biome:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [22.16.0]
+        pnpm-version: [10.12.1]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run Biome
+        run: pnpm run check
